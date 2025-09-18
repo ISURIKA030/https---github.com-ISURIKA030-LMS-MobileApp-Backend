@@ -24,4 +24,32 @@ public class EmployeeController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // Update Employee details Where Emp_Id
+    // Update Employee by empId
+    @PutMapping("/{empId}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable String empId, @RequestBody Employee updatedEmployee) {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(empId);
+
+        if (optionalEmployee.isPresent()) {
+            Employee employee = optionalEmployee.get();
+
+            // Update fields
+            employee.setEmpName(updatedEmployee.getEmpName());
+            employee.setDepartment(updatedEmployee.getDepartment());
+            employee.setContactNo(updatedEmployee.getContactNo());
+            employee.setAddress(updatedEmployee.getAddress());
+            employee.setSalaryType(updatedEmployee.getSalaryType());
+            employee.setSalary(updatedEmployee.getSalary());
+            employee.setAvailability(updatedEmployee.getAvailability());
+            employee.setLocation(updatedEmployee.getLocation());
+            employee.setEmpPhoto(updatedEmployee.getEmpPhoto());
+
+            // Save updated employee
+            Employee savedEmployee = employeeRepository.save(employee);
+            return ResponseEntity.ok(savedEmployee);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
