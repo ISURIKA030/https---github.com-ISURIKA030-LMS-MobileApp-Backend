@@ -62,83 +62,83 @@ public class Employee {
 
     //getters and setters
 
-    public String getempId() {
+    public String getEmpId() {
         return empId;
     }
 
-    public void setempId(String empId) {
+    public void setEmpId(String empId) {
         this.empId = empId;
     }
 
-    public String getempName() {
+    public String getEmpName() {
         return empId;
     }
 
-    public void setempName(String empName) {
+    public void setEmpName(String empName) {
         this.empName = empName;
     }
 
-    public String getdepartment() {
+    public String getDepartment() {
         return department;
     }
 
-    public void setdepartment(String department) {
+    public void setDepartment(String department) {
         this.department = department;
     }
 
-    public String getcontactNo() {
+    public String getContactNo() {
         return contactNo;
     }
 
-    public void setcontactNo(String contactNo) {
+    public void setContactNo(String contactNo) {
         this.contactNo = contactNo;
     }
 
-    public String getaddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setaddress(String address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
-    public String getsalaryType() {
+    public String getSalaryType() {
         return salaryType;
     }
 
-    public void setsalaryType(String salaryType) {
+    public void setSalaryType(String salaryType) {
         this.salaryType = salaryType;
     }
 
-    public String getsalary() {
+    public String getSalary() {
         return salary;
     }
 
-    public void setsalary(String salary) {
+    public void setSalary(String salary) {
         this.salary = salary;
     }
 
-    public String getavailability() {
+    public String getAvailability() {
         return availability;
     }
 
-    public void availability(String availability) {
+    public void setAvailability(String availability) {
         this.availability = availability;
     }
 
-    public String getlocation() {
+    public String getLocation() {
         return location;
     }
 
-    public void setlocation(String location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
-    public byte[] getempPhoto() {
+    public byte[] getEmpPhoto() {
         return empPhoto;
     }
 
-    public void setempPhoto(byte[] empPhoto) {
+    public void setEmpPhoto(byte[] empPhoto) {
         this.empPhoto = empPhoto;
     }
 

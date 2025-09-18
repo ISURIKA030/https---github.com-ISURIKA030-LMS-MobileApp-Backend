@@ -11,10 +11,10 @@ public class Loan {
 
     @Id
     @Column(name = "Reference_No")
-    private String RefNo;
+    private String refNo;
 
     @Column(name = "Loan_Id")
-    private String LoanId;
+    private String loanId;
 
     @Column(name = "Emp_Id")
     private String empId;
@@ -26,7 +26,7 @@ public class Loan {
     private BigDecimal loanAmount;
 
     @Column(name = "Monthly_Installment", precision = 20, scale = 2)
-    private BigDecimal Instalment;
+    private BigDecimal instalment;
 
     @Column(name = "Paid_Amount", precision = 20, scale = 2)
     private BigDecimal paidAmount;
@@ -35,7 +35,7 @@ public class Loan {
     private BigDecimal remainingBalance;
 
     @Column(name = "Loan_Date")
-    private String LoanDate;
+    private String loanDate;
 
     @Column(name = "Months")
     private int months;
@@ -52,19 +52,19 @@ public class Loan {
     }
 
     // All arguments constructor
-    public Loan(String RefNo, String LoanId, String empId, String loanType, BigDecimal loanAmount,
-            BigDecimal Instalment, BigDecimal paidAmount, BigDecimal remainingBalance, String LoanDate, int months,
+    public Loan(String refNo, String loanId, String empId, String loanType, BigDecimal loanAmount,
+            BigDecimal instalment, BigDecimal paidAmount, BigDecimal remainingBalance, String loanDate, int months,
             String loanStatus, String paymentStatus) {
 
-        this.RefNo = RefNo;
-        this.LoanId = LoanId;
+        this.refNo = refNo;
+        this.loanId = loanId;
         this.empId = empId;
         this.loanType = loanType;
         this.loanAmount = loanAmount;
-        this.Instalment = Instalment;
+        this.instalment = instalment;
         this.paidAmount = paidAmount;
         this.remainingBalance = remainingBalance;
-        this.LoanDate = LoanDate;
+        this.loanDate = loanDate;
         this.months = months;
         this.loanStatus = loanStatus;
         this.paymentStatus = paymentStatus;
@@ -74,26 +74,26 @@ public class Loan {
     // Getters and Setters
 
     public String getRefNo() {
-        return RefNo;
+        return refNo;
     }
 
-    public void setRefNo(String RefNo) {
-        this.RefNo = RefNo;
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
     }
 
     public String getLoanId() {
-        return RefNo;
+        return loanId;
     }
 
-    public void setLoanId(String LoanId) {
-        this.LoanId = LoanId;
+    public void setLoanId(String loanId) {
+        this.loanId = loanId;
     }
 
-    public String getempId() {
+    public String getEmpId() {
         return empId;
     }
 
-    public void setempId(String empId) {
+    public void setEmpId(String empId) {
         this.empId = empId;
     }
 
@@ -130,19 +130,19 @@ public class Loan {
     }
 
     public String getLoanDate() {
-        return LoanDate;
+        return loanDate;
     }
 
-    public void setLoanDate(String LoanDate) {
-        this.LoanDate = LoanDate;
+    public void setLoanDate(String loanDate) {
+        this.loanDate = loanDate;
     }
 
-    public void setInstalment(BigDecimal Instalment) {
-        this.Instalment = Instalment;
+    public void setInstalment(BigDecimal instalment) {
+        this.instalment = instalment;
     }
 
     public BigDecimal getInstalment() {
-        return Instalment;
+        return instalment;
     }
 
     public int getMonths() {
