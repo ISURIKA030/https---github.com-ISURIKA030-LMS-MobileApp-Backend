@@ -1,16 +1,12 @@
 package com.loanmanagement.loan_backend.controller;
 
 import com.loanmanagement.loan_backend.model.Employee;
-import com.loanmanagement.loan_backend.model.Loan;
 import com.loanmanagement.loan_backend.repository.EmployeeRepository;
-import com.loanmanagement.loan_backend.repository.LoanRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -20,15 +16,12 @@ public class EmployeeController {
      private EmployeeRepository employeeRepository;
 
       // Get Employee details where Emp_Id
-    @GetMapping("/employee/{empId}")
-    public ResponseEntity<List<Loan>> getActiveOrNewLoansByEmpId(@PathVariable String empId) {
-        List<String> statuses = Arrays.asList("Active", "new");
-        List<Loan> loans = loanRepository.findByEmpIdAndLoanStatusIn(empId, statuses);
+    @GetMapping("/{empId}")
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable String empId) {
+        Optional<Employee> employee = employeeRepository.findById(empId);
 
-        if (loans.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(loans);
+        return employee.map(ResponseEntity::ok)
+                       .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 
