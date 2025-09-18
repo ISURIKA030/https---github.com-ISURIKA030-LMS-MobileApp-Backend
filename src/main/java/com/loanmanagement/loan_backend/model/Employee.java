@@ -39,5 +39,10 @@ public class Employee {
     @Lob
     private byte[] empPhoto;
 
+    //Default constructor
+    public  Employee(){
+
+    }
+
 
 }
