@@ -43,6 +43,22 @@ public class Employee {
     public  Employee(){
 
     }
+    //All arguments constructor
+    public Employee(String empId, String empName, String department, String contactNo, String address, 
+    String salaryType, String salary, String availability, String location, byte[] empPhoto ){
+
+        this.empId = empId;
+        this.empName = empName;
+        this.department = department;
+        this.contactNo = contactNo;
+        this.address = address;
+        this.salaryType = salaryType;
+        this.salary = salary;
+        this.availability = availability;
+        this.location = location;
+        this.empPhoto = empPhoto;
+
+    }
 
 
 }
