@@ -2,11 +2,10 @@ package com.loanmanagement.loan_backend.model;
 
 import jakarta.persistence.*;
 
-
 @Entity
 @Table(name = "employee")
 public class Employee {
-    
+
     @Id
     @Column(name = "Emp_Id")
     private String empId;
@@ -39,13 +38,14 @@ public class Employee {
     @Lob
     private byte[] empPhoto;
 
-    //Default constructor
-    public  Employee(){
+    // Default constructor
+    public Employee() {
 
     }
-    //All arguments constructor
-    public Employee(String empId, String empName, String department, String contactNo, String address, 
-    String salaryType, String salary, String availability, String location, byte[] empPhoto ){
+
+    // All arguments constructor
+    public Employee(String empId, String empName, String department, String contactNo, String address,
+            String salaryType, String salary, String availability, String location, byte[] empPhoto) {
 
         this.empId = empId;
         this.empName = empName;
@@ -60,7 +60,7 @@ public class Employee {
 
     }
 
-    //getters and setters
+    // getters and setters
 
     public String getEmpId() {
         return empId;
@@ -141,6 +141,5 @@ public class Employee {
     public void setEmpPhoto(byte[] empPhoto) {
         this.empPhoto = empPhoto;
     }
-
 
 }

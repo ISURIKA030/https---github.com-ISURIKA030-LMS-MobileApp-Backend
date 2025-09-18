@@ -8,5 +8,3 @@ import org.springframework.stereotype.Repository;
 public interface EmployeeRepository extends JpaRepository<Employee, String> {
     // JpaRepository already has findById() so no need to add custom query here
 }
-
-
