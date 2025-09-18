@@ -71,7 +71,7 @@ public class Employee {
     }
 
     public String getEmpName() {
-        return empId;
+        return empName;
     }
 
     public void setEmpName(String empName) {
