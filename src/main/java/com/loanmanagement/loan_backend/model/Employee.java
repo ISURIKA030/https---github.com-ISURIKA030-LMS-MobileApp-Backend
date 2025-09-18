@@ -60,5 +60,87 @@ public class Employee {
 
     }
 
+    //getters and setters
+
+    public String getempId() {
+        return empId;
+    }
+
+    public void setempId(String empId) {
+        this.empId = empId;
+    }
+
+    public String getempName() {
+        return empId;
+    }
+
+    public void setempName(String empName) {
+        this.empName = empName;
+    }
+
+    public String getdepartment() {
+        return department;
+    }
+
+    public void setdepartment(String department) {
+        this.department = department;
+    }
+
+    public String getcontactNo() {
+        return contactNo;
+    }
+
+    public void setcontactNo(String contactNo) {
+        this.contactNo = contactNo;
+    }
+
+    public String getaddress() {
+        return address;
+    }
+
+    public void setaddress(String address) {
+        this.address = address;
+    }
+
+    public String getsalaryType() {
+        return salaryType;
+    }
+
+    public void setsalaryType(String salaryType) {
+        this.salaryType = salaryType;
+    }
+
+    public String getsalary() {
+        return salary;
+    }
+
+    public void setsalary(String salary) {
+        this.salary = salary;
+    }
+
+    public String getavailability() {
+        return availability;
+    }
+
+    public void availability(String availability) {
+        this.availability = availability;
+    }
+
+    public String getlocation() {
+        return location;
+    }
+
+    public void setlocation(String location) {
+        this.location = location;
+    }
+
+    public byte[] getempPhoto() {
+        return empPhoto;
+    }
+
+    public void setempPhoto(byte[] empPhoto) {
+        this.empPhoto = empPhoto;
+    }
+
 
 }
