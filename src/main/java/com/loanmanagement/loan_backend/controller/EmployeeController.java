@@ -24,8 +24,8 @@ public class EmployeeController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Update Employee details Where Emp_Id
-    // Update Employee by empId
+    // Update Employee details by Emp_Id
+    
     @PutMapping("/{empId}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable String empId, @RequestBody Employee updatedEmployee) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(empId);
