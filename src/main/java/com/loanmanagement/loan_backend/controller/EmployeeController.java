@@ -17,6 +17,24 @@ public class EmployeeController {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerEmployee(@RequestBody Employee employee) {
+        // Hash the password
+        String hashedPassword = passwordEncoder.encode(employee.getPassword());
+        employee.setPassword(hashedPassword);
+
+        // Save employee to DB
+        employeeRepository.save(employee);
+
+        // Generate JWT token
+        String token = JwtUtil.generateToken(employee.getEmpId());
+
+        // Return token to mobile app
+        return ResponseEntity.ok().body(token);
+    }
+
     // Get Employee details where Emp_Id
     @GetMapping("/{empId}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable String empId) {
