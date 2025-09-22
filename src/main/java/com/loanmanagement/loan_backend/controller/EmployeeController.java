@@ -2,8 +2,10 @@ package com.loanmanagement.loan_backend.controller;
 
 import com.loanmanagement.loan_backend.model.Employee;
 import com.loanmanagement.loan_backend.repository.EmployeeRepository;
+import com.loanmanagement.loan_backend.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
