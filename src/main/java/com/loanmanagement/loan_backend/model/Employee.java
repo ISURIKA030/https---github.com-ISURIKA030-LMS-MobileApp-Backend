@@ -38,6 +38,14 @@ public class Employee {
     @Lob
     private byte[] empPhoto;
 
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "password")
+    private String password;
+
+
+
     // Default constructor
     public Employee() {
 
@@ -45,7 +53,7 @@ public class Employee {
 
     // All arguments constructor
     public Employee(String empId, String empName, String department, String contactNo, String address,
-            String salaryType, String salary, String availability, String location, byte[] empPhoto) {
+            String salaryType, String salary, String availability, String location, byte[] empPhoto, String username, String password) {
 
         this.empId = empId;
         this.empName = empName;
@@ -57,6 +65,8 @@ public class Employee {
         this.availability = availability;
         this.location = location;
         this.empPhoto = empPhoto;
+        this.username = username;
+        this.password = password;
 
     }
 
@@ -140,6 +150,22 @@ public class Employee {
 
     public void setEmpPhoto(byte[] empPhoto) {
         this.empPhoto = empPhoto;
+    }
+
+    public String getUsername(){
+        return username;
+    }
+
+    public void setUsername(String username){
+        this.username = username;
+    }
+
+    public String getPassword(){
+        return password;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
     }
 
 }
