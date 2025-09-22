@@ -19,23 +19,23 @@ public class EmployeeController {
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-   /** Register a new employee and generate JWT token */
+    /** Register a new employee and generate JWT token */
     @PostMapping("/register")
     public ResponseEntity<?> registerEmployee(@RequestBody Employee employee) {
 
         // Check if employee with the same empId or username already exists
-    if (employeeRepository.existsByEmpId(employee.getEmpId())) {
-        return ResponseEntity
-                .badRequest()
-                .body("Employee with this ID already exists.");
-    }
+        if (employeeRepository.existsByEmpId(employee.getEmpId())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Employee with this ID already exists.");
+        }
 
         // Hash password
         String hashedPassword = passwordEncoder.encode(employee.getPassword());
         employee.setPassword(hashedPassword);
 
         // Save employee
-         Employee savedEmployee = employeeRepository.save(employee);
+        Employee savedEmployee = employeeRepository.save(employee);
 
         // Generate JWT token using username (or empId)
         String token = JwtUtil.generateToken(savedEmployee.getEmpId());
@@ -54,7 +54,7 @@ public class EmployeeController {
     }
 
     // Update Employee details by Emp_Id
-    
+
     @PutMapping("/{empId}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable String empId, @RequestBody Employee updatedEmployee) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(empId);
@@ -74,11 +74,10 @@ public class EmployeeController {
             employee.setEmpPhoto(updatedEmployee.getEmpPhoto());
             employee.setUsername(updatedEmployee.getUsername());
             // Update and hash password only if a new one is provided
-        if (updatedEmployee.getPassword() != null && !updatedEmployee.getPassword().isBlank()) {
-            String hashedPassword = passwordEncoder.encode(updatedEmployee.getPassword());
-            employee.setPassword(hashedPassword);
-        }
-
+            if (updatedEmployee.getPassword() != null && !updatedEmployee.getPassword().isBlank()) {
+                String hashedPassword = passwordEncoder.encode(updatedEmployee.getPassword());
+                employee.setPassword(hashedPassword);
+            }
 
             // Save updated employee
             Employee savedEmployee = employeeRepository.save(employee);
