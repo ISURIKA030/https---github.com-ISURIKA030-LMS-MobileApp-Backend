@@ -17,6 +17,9 @@ public class EmployeeController {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private JwtUtil JwtUtil;  // inject Spring bean
+
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     /** Register a new employee and generate JWT token */
