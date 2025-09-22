@@ -19,20 +19,22 @@ public class EmployeeController {
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+   /** Register a new employee and generate JWT token */
     @PostMapping("/register")
     public ResponseEntity<?> registerEmployee(@RequestBody Employee employee) {
-        // Hash the password
+
+        // Hash password
         String hashedPassword = passwordEncoder.encode(employee.getPassword());
         employee.setPassword(hashedPassword);
 
-        // Save employee to DB
-        employeeRepository.save(employee);
+        // Save employee
+         Employee savedEmployee = employeeRepository.save(employee);
 
-        // Generate JWT token
-        String token = JwtUtil.generateToken(employee.getEmpId());
+        // Generate JWT token using username (or empId)
+        String token = JwtUtil.generateToken(savedEmployee.getEmpId());
 
-        // Return token to mobile app
-        return ResponseEntity.ok().body(token);
+        // Return JWT token
+        return ResponseEntity.ok("Registration successful. JWT Token: " + token);
     }
 
     // Get Employee details where Emp_Id
@@ -63,6 +65,13 @@ public class EmployeeController {
             employee.setAvailability(updatedEmployee.getAvailability());
             employee.setLocation(updatedEmployee.getLocation());
             employee.setEmpPhoto(updatedEmployee.getEmpPhoto());
+            employee.setUsername(updatedEmployee.getUsername());
+            // Update and hash password only if a new one is provided
+        if (updatedEmployee.getPassword() != null && !updatedEmployee.getPassword().isBlank()) {
+            String hashedPassword = passwordEncoder.encode(updatedEmployee.getPassword());
+            employee.setPassword(hashedPassword);
+        }
+
 
             // Save updated employee
             Employee savedEmployee = employeeRepository.save(employee);
