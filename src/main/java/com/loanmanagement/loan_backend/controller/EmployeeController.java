@@ -23,6 +23,13 @@ public class EmployeeController {
     @PostMapping("/register")
     public ResponseEntity<?> registerEmployee(@RequestBody Employee employee) {
 
+        // Check if employee with the same empId or username already exists
+    if (employeeRepository.existsByEmpId(employee.getEmpId())) {
+        return ResponseEntity
+                .badRequest()
+                .body("Employee with this ID already exists.");
+    }
+
         // Hash password
         String hashedPassword = passwordEncoder.encode(employee.getPassword());
         employee.setPassword(hashedPassword);

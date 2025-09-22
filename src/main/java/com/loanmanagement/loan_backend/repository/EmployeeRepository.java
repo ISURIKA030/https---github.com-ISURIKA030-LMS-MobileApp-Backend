@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, String> {
     Employee findByEmpId(String empId);
+
+    // Check if empId already exists
+    boolean existsByEmpId(String empId);
 }
