@@ -5,7 +5,7 @@ import com.loanmanagement.loan_backend.repository.EmployeeRepository;
 import com.loanmanagement.loan_backend.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -18,76 +18,57 @@ public class EmployeeController {
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    private JwtUtil JwtUtil;  // inject Spring bean
+    private JwtUtil jwtUtil;
 
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    /** Register a new employee and generate JWT token */
+    /** Register a new employee and return JWT */
     @PostMapping("/register")
     public ResponseEntity<?> registerEmployee(@RequestBody Employee employee) {
 
-        // Check if employee with the same empId or username already exists
+        // Check if employee with same empId exists
         if (employeeRepository.existsByEmpId(employee.getEmpId())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Employee with this ID already exists.");
+            return ResponseEntity.badRequest().body("Employee with this ID already exists.");
         }
 
         // Hash password
-        String hashedPassword = passwordEncoder.encode(employee.getPassword());
-        employee.setPassword(hashedPassword);
+        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
 
         // Save employee
         Employee savedEmployee = employeeRepository.save(employee);
 
-        // Generate JWT token using username (or empId)
-        String token = JwtUtil.generateToken(savedEmployee.getEmpId());
+        // Generate JWT token
+        String token = jwtUtil.generateToken(savedEmployee.getEmpId());
 
-        // Return JWT token
-        return ResponseEntity.ok("Registration successful. JWT Token: " + token);
+        return ResponseEntity.ok().body("Registration successful. JWT Token: " + token);
     }
 
-    // Get Employee details where Emp_Id
+    /** Login employee and return JWT */
+    @PostMapping("/login")
+    public ResponseEntity<?> loginEmployee(@RequestBody Employee loginRequest) {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(loginRequest.getEmpId());
+
+        if (optionalEmployee.isEmpty()) {
+            return ResponseEntity.status(401).body("Invalid empId or password.");
+        }
+
+        Employee employee = optionalEmployee.get();
+
+        // Verify password
+        if (!passwordEncoder.matches(loginRequest.getPassword(), employee.getPassword())) {
+            return ResponseEntity.status(401).body("Invalid empId or password.");
+        }
+
+        // Generate JWT token
+        String token = jwtUtil.generateToken(employee.getEmpId());
+        return ResponseEntity.ok("Login successful. JWT Token: " + token);
+    }
+
+    /** Protected endpoint example */
     @GetMapping("/{empId}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable String empId) {
         Optional<Employee> employee = employeeRepository.findById(empId);
-
-        return employee.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return employee.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
-    // Update Employee details by Emp_Id
-
-    @PutMapping("/{empId}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable String empId, @RequestBody Employee updatedEmployee) {
-        Optional<Employee> optionalEmployee = employeeRepository.findById(empId);
-
-        if (optionalEmployee.isPresent()) {
-            Employee employee = optionalEmployee.get();
-
-            // Update fields
-            employee.setEmpName(updatedEmployee.getEmpName());
-            employee.setDepartment(updatedEmployee.getDepartment());
-            employee.setContactNo(updatedEmployee.getContactNo());
-            employee.setAddress(updatedEmployee.getAddress());
-            employee.setSalaryType(updatedEmployee.getSalaryType());
-            employee.setSalary(updatedEmployee.getSalary());
-            employee.setAvailability(updatedEmployee.getAvailability());
-            employee.setLocation(updatedEmployee.getLocation());
-            employee.setEmpPhoto(updatedEmployee.getEmpPhoto());
-            employee.setUsername(updatedEmployee.getUsername());
-            // Update and hash password only if a new one is provided
-            if (updatedEmployee.getPassword() != null && !updatedEmployee.getPassword().isBlank()) {
-                String hashedPassword = passwordEncoder.encode(updatedEmployee.getPassword());
-                employee.setPassword(hashedPassword);
-            }
-
-            // Save updated employee
-            Employee savedEmployee = employeeRepository.save(employee);
-            return ResponseEntity.ok(savedEmployee);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
 }

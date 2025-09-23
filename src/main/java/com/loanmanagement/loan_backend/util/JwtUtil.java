@@ -8,6 +8,7 @@ import java.security.Key;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -15,7 +16,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtUtil {
 
-   @Value("${jwt.secret}")
+    @Value("${jwt.secret}")
     private String SECRET_KEY;
 
     @Value("${jwt.expiration}")

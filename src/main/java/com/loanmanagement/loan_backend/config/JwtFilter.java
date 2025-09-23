@@ -2,6 +2,7 @@ package com.loanmanagement.loan_backend.config;
 
 import java.io.IOException;
 import java.util.Collections;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,10 +27,9 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
+                                    FilterChain filterChain) throws ServletException, IOException {
 
-        final String authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader("Authorization");
         String token = null;
         String empId = null;
 
@@ -43,8 +43,8 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         if (empId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            User principal = new User(empId, "", Collections.emptyList());
             if (jwtUtil.validateToken(token)) {
+                User principal = new User(empId, "", Collections.emptyList());
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -58,7 +58,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        // must match your controller mappings!
-        return "/api/employees/register".equals(path) || "/api/employees/login".equals(path);
+        // Register and login are public endpoints
+        return path.equals("/api/employees/register") || path.equals("/api/employees/login");
     }
 }
