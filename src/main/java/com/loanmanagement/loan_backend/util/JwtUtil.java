@@ -34,7 +34,7 @@ public class JwtUtil {
                 .getBody();
     }
 
-    public String getEmpIdFromToken(String token) {
+    public String getUsernameFromToken(String token) {
         return extractAllClaims(token).getSubject();
     }
 
@@ -47,11 +47,11 @@ public class JwtUtil {
         }
     }
 
-    public String generateToken(String empId) {
+    public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(empId)
+                .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
