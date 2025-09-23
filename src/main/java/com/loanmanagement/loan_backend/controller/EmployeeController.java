@@ -23,52 +23,49 @@ public class EmployeeController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    /** Register a new employee and return JWT */
+    /** Register a new employee */
     @PostMapping("/register")
     public ResponseEntity<?> registerEmployee(@RequestBody Employee employee) {
-
-        // Check if employee with same empId exists
         if (employeeRepository.existsByEmpId(employee.getEmpId())) {
             return ResponseEntity.badRequest().body("Employee with this ID already exists.");
         }
+        if (employeeRepository.findByUsername(employee.getUsername()).isPresent()) {
+            return ResponseEntity.badRequest().body("Username already taken.");
+        }
 
-        // Hash password
+        // Encode password before saving
         employee.setPassword(passwordEncoder.encode(employee.getPassword()));
 
-        // Save employee
         Employee savedEmployee = employeeRepository.save(employee);
 
-        // Generate JWT token
-        String token = jwtUtil.generateToken(savedEmployee.getEmpId());
-
-        return ResponseEntity.ok().body("Registration successful. JWT Token: " + token);
+        return ResponseEntity.ok("Registration successful for: " + savedEmployee.getUsername());
     }
 
     /** Login employee and return JWT */
     @PostMapping("/login")
     public ResponseEntity<?> loginEmployee(@RequestBody Employee loginRequest) {
-        Optional<Employee> optionalEmployee = employeeRepository.findById(loginRequest.getEmpId());
+        Optional<Employee> optionalEmployee = employeeRepository.findByUsername(loginRequest.getUsername());
 
         if (optionalEmployee.isEmpty()) {
-            return ResponseEntity.status(401).body("Invalid empId or password.");
+            return ResponseEntity.status(401).body("Invalid username or password.");
         }
 
         Employee employee = optionalEmployee.get();
 
-        // Verify password
         if (!passwordEncoder.matches(loginRequest.getPassword(), employee.getPassword())) {
-            return ResponseEntity.status(401).body("Invalid empId or password.");
+            return ResponseEntity.status(401).body("Invalid username or password.");
         }
 
-        // Generate JWT token
-        String token = jwtUtil.generateToken(employee.getEmpId());
-        return ResponseEntity.ok("Login successful. JWT Token: " + token);
+        // JWT stores username, not empId
+        String token = jwtUtil.generateToken(employee.getUsername());
+
+        return ResponseEntity.ok().body("Login successful. JWT Token: " + token);
     }
 
-    /** Protected endpoint example */
-    @GetMapping("/{empId}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable String empId) {
-        Optional<Employee> employee = employeeRepository.findById(empId);
+    /** Example protected endpoint */
+    @GetMapping("/me")
+    public ResponseEntity<?> getMyProfile(@RequestAttribute("username") String username) {
+        Optional<Employee> employee = employeeRepository.findByUsername(username);
         return employee.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
