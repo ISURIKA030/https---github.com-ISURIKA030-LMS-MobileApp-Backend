@@ -26,29 +26,32 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
         String token = null;
-        String empId = null;
+        String username = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
             try {
-                empId = jwtUtil.getEmpIdFromToken(token);
+                username = jwtUtil.getUsernameFromToken(token);
             } catch (Exception e) {
-                empId = null;
+                username = null;
             }
         }
 
-        if (empId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             if (jwtUtil.validateToken(token)) {
-                User principal = new User(empId, "", Collections.emptyList());
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(principal, null,
-                        principal.getAuthorities());
+                User principal = new User(username, "", Collections.emptyList());
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(auth);
+
+                // Make username accessible in controller
+                request.setAttribute("username", username);
             }
         }
 
@@ -58,7 +61,9 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        // Register and login are public endpoints
-        return path.equals("/api/employees/register") || path.equals("/api/employees/login") || path.equals("/hello");
+        // Public endpoints
+        return path.equals("/api/employees/register")
+                || path.equals("/api/employees/login")
+                || path.equals("/hello");
     }
 }
