@@ -2,7 +2,6 @@ package com.loanmanagement.loan_backend.config;
 
 import java.io.IOException;
 import java.util.Collections;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,6 +58,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return "/employee/register".equals(path) || "/employee/login".equals(path);
+        // must match your controller mappings!
+        return "/api/employees/register".equals(path) || "/api/employees/login".equals(path);
     }
 }

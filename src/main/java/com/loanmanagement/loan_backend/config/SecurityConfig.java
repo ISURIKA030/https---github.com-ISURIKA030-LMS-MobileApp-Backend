@@ -21,11 +21,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(org.springframework.security.config.annotation.web.builders.HttpSecurity http) throws Exception {
-
         http
-            .csrf(csrf -> csrf.disable())  // disable CSRF
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/employee/register", "/employee/login").permitAll()
+                .requestMatchers("/api/employees/register", "/api/employees/login").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
@@ -33,7 +32,6 @@ public class SecurityConfig {
             );
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 
