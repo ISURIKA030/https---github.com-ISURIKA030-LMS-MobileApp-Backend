@@ -41,10 +41,8 @@ public class Employee {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "password")
+    @Column(name = "password", length = 255, nullable = false)
     private String password;
-
-
 
     // Default constructor
     public Employee() {
@@ -53,7 +51,8 @@ public class Employee {
 
     // All arguments constructor
     public Employee(String empId, String empName, String department, String contactNo, String address,
-            String salaryType, String salary, String availability, String location, byte[] empPhoto, String username, String password) {
+            String salaryType, String salary, String availability, String location, byte[] empPhoto, String username,
+            String password) {
 
         this.empId = empId;
         this.empName = empName;
@@ -152,19 +151,19 @@ public class Employee {
         this.empPhoto = empPhoto;
     }
 
-    public String getUsername(){
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username){
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password){
+    public void setPassword(String password) {
         this.password = password;
     }
 

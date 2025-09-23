@@ -26,8 +26,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
         String token = null;
@@ -45,8 +45,8 @@ public class JwtFilter extends OncePerRequestFilter {
         if (empId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             if (jwtUtil.validateToken(token)) {
                 User principal = new User(empId, "", Collections.emptyList());
-                UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(principal, null,
+                        principal.getAuthorities());
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
@@ -59,6 +59,6 @@ public class JwtFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
         // Register and login are public endpoints
-        return path.equals("/api/employees/register") || path.equals("/api/employees/login");
+        return path.equals("/api/employees/register") || path.equals("/api/employees/login") || path.equals("/hello");
     }
 }
