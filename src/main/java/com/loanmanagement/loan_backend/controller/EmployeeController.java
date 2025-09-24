@@ -70,7 +70,7 @@ public class EmployeeController {
         return employee.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    /**  Edit logged-in employee profile */
+    /** Edit logged-in employee profile */
     @PutMapping("/me")
     public ResponseEntity<?> updateMyProfile(@RequestAttribute("empId") String empId,
             @RequestBody Employee updatedData) {
