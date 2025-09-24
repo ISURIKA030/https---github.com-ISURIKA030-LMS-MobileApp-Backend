@@ -69,4 +69,55 @@ public class EmployeeController {
         Optional<Employee> employee = employeeRepository.findById(empId);
         return employee.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    /**  Edit logged-in employee profile */
+    @PutMapping("/me")
+    public ResponseEntity<?> updateMyProfile(@RequestAttribute("empId") String empId,
+            @RequestBody Employee updatedData) {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(empId);
+
+        if (optionalEmployee.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Employee employee = optionalEmployee.get();
+
+        // Update fields if provided
+        if (updatedData.getEmpName() != null) {
+            employee.setEmpName(updatedData.getEmpName());
+        }
+        if (updatedData.getDepartment() != null) {
+            employee.setDepartment(updatedData.getDepartment());
+        }
+        if (updatedData.getContactNo() != null) {
+            employee.setContactNo(updatedData.getContactNo());
+        }
+        if (updatedData.getSalaryType() != null) {
+            employee.setSalaryType(updatedData.getSalaryType());
+        }
+        if (updatedData.getSalary() != null) {
+            employee.setSalary(updatedData.getSalary());
+        }
+        if (updatedData.getAvailability() != null) {
+            employee.setAvailability(updatedData.getAvailability());
+        }
+        if (updatedData.getUsername() != null) {
+            employee.setUsername(updatedData.getUsername());
+        }
+        if (updatedData.getPassword() != null && !updatedData.getPassword().isBlank()) {
+            employee.setPassword(passwordEncoder.encode(updatedData.getPassword()));
+        }
+        if (updatedData.getAddress() != null) {
+            employee.setAddress(updatedData.getAddress());
+        }
+        if (updatedData.getLocation() != null) {
+            employee.setLocation(updatedData.getLocation());
+        }
+        if (updatedData.getEmpPhoto() != null) {
+            employee.setEmpPhoto(updatedData.getEmpPhoto());
+        }
+
+        Employee savedEmployee = employeeRepository.save(employee);
+        return ResponseEntity.ok(savedEmployee);
+    }
 }
