@@ -71,7 +71,7 @@ public class EmployeeController {
     }
 
     /** Edit logged-in employee profile */
-    @PutMapping("/me")
+    @PutMapping("/edit/me")
     public ResponseEntity<?> updateMyProfile(@RequestAttribute("empId") String empId,
             @RequestBody Employee updatedData) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(empId);
