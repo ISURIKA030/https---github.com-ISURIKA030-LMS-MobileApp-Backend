@@ -33,10 +33,10 @@ public class EmployeeController {
             return ResponseEntity.badRequest().body("Username already taken.");
         }
 
-        // Encode only during registration
+        // Encode the raw password ONCE at registration
         employee.setPassword(passwordEncoder.encode(employee.getPassword()));
-
         Employee savedEmployee = employeeRepository.save(employee);
+
         return ResponseEntity.ok("Registration successful for: " + savedEmployee.getUsername());
     }
 
@@ -51,14 +51,16 @@ public class EmployeeController {
 
         Employee employee = optionalEmployee.get();
 
-        if (!passwordEncoder.matches(loginRequest.getPassword(), employee.getPassword())) {
+        // ✅ DO NOT encode loginRequest.getPassword() again. Use matches instead.
+        boolean passwordOk = passwordEncoder.matches(loginRequest.getPassword(), employee.getPassword());
+        if (!passwordOk) {
             return ResponseEntity.status(401).body("Invalid username or password.");
         }
 
         // Generate JWT for username
         String token = jwtUtil.generateToken(employee.getUsername());
 
-        // Attach empId at beginning
+        // Attach empId at beginning (custom format)
         String combinedToken = employee.getEmpId() + "," + token;
 
         return ResponseEntity.ok().body("Login successful. Token: " + combinedToken);
@@ -74,7 +76,7 @@ public class EmployeeController {
     /** Edit logged-in employee profile */
     @PutMapping("/edit/me")
     public ResponseEntity<?> updateMyProfile(@RequestAttribute("empId") String empId,
-            @RequestBody Employee updatedData) {
+                                             @RequestBody Employee updatedData) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(empId);
 
         if (optionalEmployee.isEmpty()) {
@@ -84,39 +86,20 @@ public class EmployeeController {
         Employee employee = optionalEmployee.get();
 
         // Update fields if provided
-        if (updatedData.getEmpName() != null) {
-            employee.setEmpName(updatedData.getEmpName());
-        }
-        if (updatedData.getDepartment() != null) {
-            employee.setDepartment(updatedData.getDepartment());
-        }
-        if (updatedData.getContactNo() != null) {
-            employee.setContactNo(updatedData.getContactNo());
-        }
-        if (updatedData.getSalaryType() != null) {
-            employee.setSalaryType(updatedData.getSalaryType());
-        }
-        if (updatedData.getSalary() != null) {
-            employee.setSalary(updatedData.getSalary());
-        }
-        if (updatedData.getAvailability() != null) {
-            employee.setAvailability(updatedData.getAvailability());
-        }
-        if (updatedData.getUsername() != null) {
-            employee.setUsername(updatedData.getUsername());
-        }
+        if (updatedData.getEmpName() != null) employee.setEmpName(updatedData.getEmpName());
+        if (updatedData.getDepartment() != null) employee.setDepartment(updatedData.getDepartment());
+        if (updatedData.getContactNo() != null) employee.setContactNo(updatedData.getContactNo());
+        if (updatedData.getSalaryType() != null) employee.setSalaryType(updatedData.getSalaryType());
+        if (updatedData.getSalary() != null) employee.setSalary(updatedData.getSalary());
+        if (updatedData.getAvailability() != null) employee.setAvailability(updatedData.getAvailability());
+        if (updatedData.getUsername() != null) employee.setUsername(updatedData.getUsername());
         if (updatedData.getPassword() != null && !updatedData.getPassword().isBlank()) {
+            // Always re-encode new password
             employee.setPassword(passwordEncoder.encode(updatedData.getPassword()));
         }
-        if (updatedData.getAddress() != null) {
-            employee.setAddress(updatedData.getAddress());
-        }
-        if (updatedData.getLocation() != null) {
-            employee.setLocation(updatedData.getLocation());
-        }
-        if (updatedData.getEmpPhoto() != null) {
-            employee.setEmpPhoto(updatedData.getEmpPhoto());
-        }
+        if (updatedData.getAddress() != null) employee.setAddress(updatedData.getAddress());
+        if (updatedData.getLocation() != null) employee.setLocation(updatedData.getLocation());
+        if (updatedData.getEmpPhoto() != null) employee.setEmpPhoto(updatedData.getEmpPhoto());
 
         Employee savedEmployee = employeeRepository.save(employee);
         return ResponseEntity.ok(savedEmployee);
