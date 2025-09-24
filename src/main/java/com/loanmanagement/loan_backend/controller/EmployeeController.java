@@ -33,9 +33,10 @@ public class EmployeeController {
             return ResponseEntity.badRequest().body("Username already taken.");
         }
 
-        employee.setPassword(passwordEncoder.encode(employee.getPassword())); // encode password
-        Employee savedEmployee = employeeRepository.save(employee);
+        // Encode only during registration
+        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
 
+        Employee savedEmployee = employeeRepository.save(employee);
         return ResponseEntity.ok("Registration successful for: " + savedEmployee.getUsername());
     }
 
