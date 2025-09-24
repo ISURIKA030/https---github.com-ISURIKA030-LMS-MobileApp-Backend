@@ -8,6 +8,8 @@ import java.util.List;
 
 @Repository
 public interface LoanRepository extends JpaRepository<Loan, String> {
-    // Fetch loans by employee and status
-    List<Loan> findByEmpIdAndLoanStatusIn(String empId, List<String> loanStatuses);
+
+    // Fetch loans by empId and loanStatus in given list
+    List<Loan> findByEmpIdAndLoanStatusIn(String empId, List<String> statuses);
+
 }
