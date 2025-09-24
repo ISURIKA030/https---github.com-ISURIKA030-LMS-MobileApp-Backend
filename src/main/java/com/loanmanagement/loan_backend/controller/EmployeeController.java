@@ -33,15 +33,13 @@ public class EmployeeController {
             return ResponseEntity.badRequest().body("Username already taken.");
         }
 
-        // Encode password before saving
-        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
-
+        employee.setPassword(passwordEncoder.encode(employee.getPassword())); // encode password
         Employee savedEmployee = employeeRepository.save(employee);
 
         return ResponseEntity.ok("Registration successful for: " + savedEmployee.getUsername());
     }
 
-    /** Login employee and return JWT */
+    /** Login employee and return EMPID + JWT */
     @PostMapping("/login")
     public ResponseEntity<?> loginEmployee(@RequestBody Employee loginRequest) {
         Optional<Employee> optionalEmployee = employeeRepository.findByUsername(loginRequest.getUsername());
@@ -56,16 +54,19 @@ public class EmployeeController {
             return ResponseEntity.status(401).body("Invalid username or password.");
         }
 
-        // JWT stores username, not empId
+        // Generate JWT for username
         String token = jwtUtil.generateToken(employee.getUsername());
 
-        return ResponseEntity.ok().body("Login successful. JWT Token: " + token);
+        // Attach empId at beginning
+        String combinedToken = employee.getEmpId() + "," + token;
+
+        return ResponseEntity.ok().body("Login successful. Token: " + combinedToken);
     }
 
-    /** Example protected endpoint */
+    /** Protected endpoint: Get logged-in employee profile */
     @GetMapping("/me")
-    public ResponseEntity<?> getMyProfile(@RequestAttribute("username") String username) {
-        Optional<Employee> employee = employeeRepository.findByUsername(username);
+    public ResponseEntity<?> getMyProfile(@RequestAttribute("empId") String empId) {
+        Optional<Employee> employee = employeeRepository.findById(empId);
         return employee.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

@@ -26,32 +26,41 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
         String token = null;
         String username = null;
+        String empId = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7);
-            try {
-                username = jwtUtil.getUsernameFromToken(token);
-            } catch (Exception e) {
-                username = null;
+            String combinedToken = authHeader.substring(7);
+
+            // Split empId and real JWT
+            String[] parts = combinedToken.split(",", 2);
+            if (parts.length == 2) {
+                empId = parts[0];
+                token = parts[1];
+                try {
+                    username = jwtUtil.getUsernameFromToken(token);
+                } catch (Exception e) {
+                    username = null;
+                }
             }
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             if (jwtUtil.validateToken(token)) {
                 User principal = new User(username, "", Collections.emptyList());
-                UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(principal, null,
+                        principal.getAuthorities());
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
-                // Make username accessible in controller
+                // Attach both username and empId to request
                 request.setAttribute("username", username);
+                request.setAttribute("empId", empId);
             }
         }
 
