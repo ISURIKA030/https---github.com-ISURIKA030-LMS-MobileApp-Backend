@@ -1,7 +1,7 @@
 package com.loanmanagement.loan_backend.model;
 
 import jakarta.persistence.*;
-
+import java.time.LocalDate;
 import java.math.BigDecimal;
 
 @Entity
@@ -29,7 +29,7 @@ public class LoanRequest {
     private Integer months;
 
     @Column(name = "Date", nullable = false)
-    private String date;
+    private LocalDate date;
 
     // ✅ Getters & Setters
     public Long getReqId() {
@@ -80,11 +80,11 @@ public class LoanRequest {
         this.months = months;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 }
