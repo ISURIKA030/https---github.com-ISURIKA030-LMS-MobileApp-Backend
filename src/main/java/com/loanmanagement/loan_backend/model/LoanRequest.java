@@ -11,7 +11,7 @@ public class LoanRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment Req_Id
     @Column(name = "Req_Id")
-    private Long reqId;
+    private String reqId;
 
     @Column(name = "Loan_Id", nullable = false)
     private String loanId;
@@ -32,11 +32,11 @@ public class LoanRequest {
     private LocalDate date;
 
     // ✅ Getters & Setters
-    public Long getReqId() {
+    public String getReqId() {
         return reqId;
     }
 
-    public void setReqId(Long reqId) {
+    public void setReqId(String reqId) {
         this.reqId = reqId;
     }
 
