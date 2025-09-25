@@ -12,4 +12,7 @@ public interface LoanRepository extends JpaRepository<Loan, String> {
     // Fetch loans by empId and loanStatus in given list
     List<Loan> findByEmpIdAndLoanStatusIn(String empId, List<String> statuses);
 
+    // Find loans by employee and payment status
+    List<Loan> findByEmpIdAndPaymentStatus(String empId, String paymentStatus);
+
 }
