@@ -38,4 +38,22 @@ public class LoanController {
 
         return ResponseEntity.ok(loans);
     }
+
+    /** Get logged-in employee's loans with Payment_Status = Pending */
+    @GetMapping("/my-pending-loans")
+    public ResponseEntity<?> getMyPendingLoans(HttpServletRequest request) {
+        String empId = (String) request.getAttribute("empId");
+
+        if (empId == null) {
+            return ResponseEntity.status(401).body("Unauthorized: empId not found in token.");
+        }
+
+        List<Loan> pendingLoans = loanRepository.findByEmpIdAndPaymentStatus(empId, "Pending");
+
+        if (pendingLoans.isEmpty()) {
+            return ResponseEntity.ok("No pending loans found for employee: " + empId);
+        }
+
+        return ResponseEntity.ok(pendingLoans);
+    }
 }
