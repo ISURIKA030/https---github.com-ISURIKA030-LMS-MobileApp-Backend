@@ -14,9 +14,10 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("*") // You can replace "*" with your Flutter app URL later
+                        .allowedOrigins("http://localhost:5000") // You can replace "*" with your Flutter app URL later
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*");
+
             }
         };
     }
